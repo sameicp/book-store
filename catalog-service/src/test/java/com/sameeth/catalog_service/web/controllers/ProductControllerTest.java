@@ -4,18 +4,18 @@ import com.sameeth.catalog_service.AbstractIT;
 import com.sameeth.catalog_service.domain.Product;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.math.BigDecimal;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.math.BigDecimal;
-
 @Sql("/test-data.sql")
 class ProductControllerTest extends AbstractIT {
     @Test
     void shouldReturnProducts() {
-        RestAssured.given().contentType(ContentType.JSON)
+        RestAssured.given()
+                .contentType(ContentType.JSON)
                 .when()
                 .get("/api/products")
                 .then()
@@ -32,7 +32,8 @@ class ProductControllerTest extends AbstractIT {
 
     @Test
     void shouldGetProductByCode() {
-        Product product = RestAssured.given().contentType(ContentType.JSON)
+        Product product = RestAssured.given()
+                .contentType(ContentType.JSON)
                 .when()
                 .get("/api/products/{code}", "GR009")
                 .then()
@@ -43,14 +44,17 @@ class ProductControllerTest extends AbstractIT {
                 .as(Product.class);
         Assertions.assertThat(product.code()).isEqualTo("GR009");
         Assertions.assertThat(product.name()).isEqualTo("The Chronicles of Narnia");
-        Assertions.assertThat(product.description()).isEqualTo("A series of fantasy novels where children discover a magical world accessible through a wardrobe.");
+        Assertions.assertThat(product.description())
+                .isEqualTo(
+                        "A series of fantasy novels where children discover a magical world accessible through a wardrobe.");
         Assertions.assertThat(product.price()).isEqualTo(BigDecimal.valueOf(15.99));
     }
 
     @Test
     void shouldReturnNotFoundWhenProductCodeNotExist() {
         String code = "same";
-        RestAssured.given().contentType(ContentType.JSON)
+        RestAssured.given()
+                .contentType(ContentType.JSON)
                 .when()
                 .get("/api/products/{code}", code)
                 .then()
