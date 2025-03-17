@@ -1,0 +1,16 @@
+name: 'bookstore'
+services:
+  catalog-service:
+    image: sameeth/bookstore-catalog-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DB_URL=jdbc:postgresql://catalog-db:5432/same
+      - DB_USERNAME=same
+      - DB_PASSWORD=same
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 700m
