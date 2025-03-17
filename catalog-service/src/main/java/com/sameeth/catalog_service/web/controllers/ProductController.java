@@ -7,6 +7,8 @@ import com.sameeth.catalog_service.domain.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+// cleaned unused imports
+
 @RestController
 @RequestMapping("/api/products")
 class ProductController {
