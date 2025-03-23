@@ -2,7 +2,7 @@ name: "book-store"
 services:
   catalog-db:
     image: postgres:16-alpine
-    container_name: calaog-db
+    container_name: catalog-db
     environment:
       - POSTGRES_USER=same
       - POSTGRES_PASSWORD=same
@@ -55,4 +55,4 @@ services:
     deploy:
       resources:
         limits:
-          memeory: 500m
+          memory: 500m

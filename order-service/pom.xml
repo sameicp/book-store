@@ -30,6 +30,7 @@
 		<java.version>21</java.version>
 		<dockerImageName>sameeth/bookstore-${project.artifactId}</dockerImageName>
 		<spring-cloud.version>2024.0.0</spring-cloud.version>
+		<instancio.version>5.4.0</instancio.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -124,6 +125,12 @@
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.instancio</groupId>
+			<artifactId>instancio-junit</artifactId>
+			<version>${instancio.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
