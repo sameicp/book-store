@@ -9,11 +9,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import java.math.BigDecimal;
+
 class OrderControllerTests extends AbstractIT {
     @Nested
     class CreateOrderTests {
         @Test
         void shouldCreateOrderSuccessfully() {
+            mockGetProductByCode("same", "Product 1", BigDecimal.valueOf(12.1));
             var payload =
                     """
                             {

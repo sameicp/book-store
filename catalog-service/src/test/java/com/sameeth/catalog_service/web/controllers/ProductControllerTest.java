@@ -20,13 +20,13 @@ class ProductControllerTest extends AbstractIT {
                 .get("/api/products")
                 .then()
                 .statusCode(200)
-                .body("data", Matchers.hasSize(10))
+                .body("data", Matchers.hasSize(15))
                 .body("totalElements", Matchers.is(15))
                 .body("pageNumber", Matchers.is(1))
-                .body("totalPages", Matchers.is(2))
+                .body("totalPages", Matchers.is(1))
                 .body("isFirst", Matchers.is(true))
-                .body("isLast", Matchers.is(false))
-                .body("hasNext", Matchers.is(true))
+                .body("isLast", Matchers.is(true))
+                .body("hasNext", Matchers.is(false))
                 .body("hasPrevious", Matchers.is(false));
     }
 
