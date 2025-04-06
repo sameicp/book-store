@@ -1,17 +1,42 @@
 package com.sameeth.order_service.web.controllers;
 
 import com.sameeth.order_service.AbstractIT;
+import com.sameeth.order_service.domain.models.OrderSummary;
 import com.sameeth.order_service.testdata.TestDataFactory;
 import io.restassured.RestAssured;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+@Sql("/test-orders.sql")
 class OrderControllerTests extends AbstractIT {
+
+    @Nested
+    class GetOrdersTests {
+
+        @Test
+        void shouldGetOrdersSuccessfully() {
+            List<OrderSummary> orderSummaries = RestAssured.given().when()
+                    .get("/api/orders")
+                    .then()
+                    .log().all()
+                    .statusCode(200)
+                    .extract()
+                    .body()
+                    .as(new TypeRef<>() {});
+
+            Assertions.assertThat(orderSummaries).hasSize(2);
+        }
+    }
+
     @Nested
     class CreateOrderTests {
         @Test
@@ -55,12 +80,30 @@ class OrderControllerTests extends AbstractIT {
         @Test
         void shouldReturnBadRequestWhenMandatoryDataIsMissing() {
             var payload = TestDataFactory.createOrderRequestWithInvalidCustomer();
-            RestAssured.given().contentType(ContentType.JSON)
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
                     .body(payload)
                     .when()
                     .post("/api/orders")
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value());
+        }
+    }
+
+    @Nested
+    class GetOrderByOrderNumberTests {
+        String orderNumber = "order-123";
+
+        @Test
+        void shouldGetOrderSuccessfully() {
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
+                    .when()
+                    .get("/api/orders/{orderNumber}", orderNumber)
+                    .then()
+                    .statusCode(200)
+                    .body("orderNumber", CoreMatchers.is(orderNumber))
+                    .body("items.size()", CoreMatchers.is(2));
         }
     }
 }
