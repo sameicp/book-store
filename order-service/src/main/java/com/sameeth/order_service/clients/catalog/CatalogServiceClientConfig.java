@@ -1,13 +1,12 @@
 package com.sameeth.order_service.clients.catalog;
 
 import com.sameeth.order_service.ApplicationProperties;
+import java.time.Duration;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
-
-import java.time.Duration;
 
 @Configuration
 class CatalogServiceClientConfig {
@@ -20,8 +19,7 @@ class CatalogServiceClientConfig {
                 })
                 .build();
 
-        return RestClient
-                .builder()
+        return RestClient.builder()
                 .baseUrl(properties.catalogServiceUrl())
                 .requestFactory(requestFactory)
                 .build();

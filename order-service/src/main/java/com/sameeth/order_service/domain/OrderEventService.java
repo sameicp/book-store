@@ -6,13 +6,12 @@ import com.sameeth.order_service.domain.models.OrderCancelledEvent;
 import com.sameeth.order_service.domain.models.OrderCreatedEvent;
 import com.sameeth.order_service.domain.models.OrderDeliveredEvent;
 import com.sameeth.order_service.domain.models.OrderErrorEvent;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -72,7 +71,7 @@ public class OrderEventService {
         Sort sort = Sort.by("createdAt").ascending();
         List<OrderEventEntity> events = repository.findAll(sort);
         log.info("Found {} Order Events to be published", events.size());
-        for (var event: events) {
+        for (var event : events) {
             log.info("Publishing event: {}", event.getEventId());
             this.publishEvent(event);
             repository.delete(event);
@@ -81,19 +80,21 @@ public class OrderEventService {
 
     private void publishEvent(OrderEventEntity event) {
         OrderEventType eventType = event.getEventType();
-        switch (eventType){
+        switch (eventType) {
             case ORDER_CREATED -> {
                 OrderCreatedEvent orderCreatedEvent = fromJsonPayload(event.getPayload(), OrderCreatedEvent.class);
                 publisher.publish(orderCreatedEvent);
                 log.info("Event with id {} was published successfully", event.getEventId());
             }
             case ORDER_DELIVERED -> {
-                OrderDeliveredEvent orderDeliveredEvent = fromJsonPayload(event.getPayload(), OrderDeliveredEvent.class);
+                OrderDeliveredEvent orderDeliveredEvent =
+                        fromJsonPayload(event.getPayload(), OrderDeliveredEvent.class);
                 publisher.publish(orderDeliveredEvent);
             }
 
             case ORDER_CANCELLED -> {
-                OrderCancelledEvent orderCancelledEvent = fromJsonPayload(event.getPayload(), OrderCancelledEvent.class);
+                OrderCancelledEvent orderCancelledEvent =
+                        fromJsonPayload(event.getPayload(), OrderCancelledEvent.class);
                 publisher.publish(orderCancelledEvent);
             }
 
@@ -107,7 +108,7 @@ public class OrderEventService {
             }
         }
     }
-    
+
     private String toJsonPayload(Object object) {
         try {
             return mapper.writeValueAsString(object);
@@ -115,7 +116,7 @@ public class OrderEventService {
             throw new RuntimeException(e);
         }
     }
-    
+
     private <T> T fromJsonPayload(String json, Class<T> type) {
         try {
             return mapper.readValue(json, type);

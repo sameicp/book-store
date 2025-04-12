@@ -1,13 +1,12 @@
 package com.sameeth.order_service.domain;
 
 import com.sameeth.order_service.domain.models.*;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -43,7 +42,8 @@ public class OrderService {
     }
 
     public Optional<OrderDTO> findUserOrder(String userName, String orderNumber) {
-        return orderRepository.findByUserNameAndOrderNumber(userName, orderNumber)
+        return orderRepository
+                .findByUserNameAndOrderNumber(userName, orderNumber)
                 .map(OrderMapper::convertToDTO);
     }
 
@@ -64,7 +64,8 @@ public class OrderService {
             } else {
                 log.info("OrderNumber: {} can not be delivered", order.getOrderNumber());
                 orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatus.CANCELLED);
-                orderEventService.save(OrderEventMapper.buildOrderCancelledEvent(order, "Can't deliver to the location"));
+                orderEventService.save(
+                        OrderEventMapper.buildOrderCancelledEvent(order, "Can't deliver to the location"));
             }
         } catch (RuntimeException e) {
             log.error("Failed to process Order with orderNumber: {}", order.getOrderNumber(), e);
@@ -74,6 +75,7 @@ public class OrderService {
     }
 
     private boolean canBeDelivered(OrderEntity order) {
-        return DELIVERY_ALLOWED_COUNTRIES.contains(order.getDeliveryAddress().country().toUpperCase());
+        return DELIVERY_ALLOWED_COUNTRIES.contains(
+                order.getDeliveryAddress().country().toUpperCase());
     }
 }

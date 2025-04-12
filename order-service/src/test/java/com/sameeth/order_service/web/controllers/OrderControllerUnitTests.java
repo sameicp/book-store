@@ -5,6 +5,7 @@ import com.sameeth.order_service.domain.OrderService;
 import com.sameeth.order_service.domain.SecurityService;
 import com.sameeth.order_service.domain.models.CreateOrderRequest;
 import com.sameeth.order_service.testdata.TestDataFactory;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,8 +19,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.stream.Stream;
 
 @WebMvcTest(OrderController.class)
 public class OrderControllerUnitTests {
@@ -42,7 +41,8 @@ public class OrderControllerUnitTests {
     @ParameterizedTest(name = "[{index}]-{0}")
     @MethodSource("createOrderRequestProvider")
     void shouldReturnBadRequestWhenOrderPayloadIsInvalid(CreateOrderRequest request) throws Exception {
-        BDDMockito.given(orderService.createOrder(ArgumentMatchers.eq("same"), ArgumentMatchers.any(CreateOrderRequest.class)))
+        BDDMockito.given(orderService.createOrder(
+                        ArgumentMatchers.eq("same"), ArgumentMatchers.any(CreateOrderRequest.class)))
                 .willReturn(null);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/orders")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -52,8 +52,12 @@ public class OrderControllerUnitTests {
 
     static Stream<Arguments> createOrderRequestProvider() {
         return Stream.of(
-                Arguments.arguments(Named.named("Order with Invalid Customer", TestDataFactory.createOrderRequestWithInvalidCustomer())),
-                Arguments.arguments(Named.named("Order with Invalid delivered address", TestDataFactory.createOrderRequestWithInvalidDeliveryAddress())),
-                Arguments.arguments(Named.named("Order with no Items", TestDataFactory.createOrderRequestWithNoItems())));
+                Arguments.arguments(Named.named(
+                        "Order with Invalid Customer", TestDataFactory.createOrderRequestWithInvalidCustomer())),
+                Arguments.arguments(Named.named(
+                        "Order with Invalid delivered address",
+                        TestDataFactory.createOrderRequestWithInvalidDeliveryAddress())),
+                Arguments.arguments(
+                        Named.named("Order with no Items", TestDataFactory.createOrderRequestWithNoItems())));
     }
 }

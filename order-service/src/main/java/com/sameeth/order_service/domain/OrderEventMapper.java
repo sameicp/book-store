@@ -1,14 +1,13 @@
 package com.sameeth.order_service.domain;
 
 import com.sameeth.order_service.domain.models.*;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 class OrderEventMapper {
-    
+
     static OrderCreatedEvent buildOrderCreatedEvent(OrderEntity order) {
         return new OrderCreatedEvent(
                 UUID.randomUUID().toString(),
@@ -16,8 +15,7 @@ class OrderEventMapper {
                 getOrderItems(order),
                 order.getCustomer(),
                 order.getDeliveryAddress(),
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
     }
 
     static OrderDeliveredEvent buildOrderDeliveredEvent(OrderEntity order) {
@@ -38,8 +36,7 @@ class OrderEventMapper {
                 order.getCustomer(),
                 order.getDeliveryAddress(),
                 reason,
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
     }
 
     static OrderErrorEvent buildOrderErrorEvent(OrderEntity order, String reason) {
@@ -50,8 +47,7 @@ class OrderEventMapper {
                 order.getCustomer(),
                 order.getDeliveryAddress(),
                 reason,
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
     }
 
     private static Set<OrderItem> getOrderItems(OrderEntity order) {

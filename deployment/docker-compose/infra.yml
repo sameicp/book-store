@@ -19,7 +19,7 @@ services:
         limits:
           memory: 500m
 
-  order-db:
+  orders-db:
     image: postgres:16-alpine
     container_name: orders-db
     environment:

@@ -2,6 +2,7 @@ package com.sameeth.order_service;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import io.restassured.RestAssured;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,13 +13,12 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.wiremock.integrations.testcontainers.WireMockContainer;
 
-import java.math.BigDecimal;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestcontainersConfiguration.class)
 public abstract class AbstractIT {
     @LocalServerPort
     int port;
+
     static WireMockContainer wiremockContainer = new WireMockContainer("wiremock/wiremock:3.5.2-alpine");
 
     @BeforeAll
@@ -33,7 +33,7 @@ public abstract class AbstractIT {
     }
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         RestAssured.port = port;
     }
 

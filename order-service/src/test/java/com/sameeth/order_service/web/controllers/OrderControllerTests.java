@@ -6,15 +6,14 @@ import com.sameeth.order_service.testdata.TestDataFactory;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import java.math.BigDecimal;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Sql("/test-orders.sql")
 class OrderControllerTests extends AbstractIT {
@@ -24,10 +23,12 @@ class OrderControllerTests extends AbstractIT {
 
         @Test
         void shouldGetOrdersSuccessfully() {
-            List<OrderSummary> orderSummaries = RestAssured.given().when()
+            List<OrderSummary> orderSummaries = RestAssured.given()
+                    .when()
                     .get("/api/orders")
                     .then()
-                    .log().all()
+                    .log()
+                    .all()
                     .statusCode(200)
                     .extract()
                     .body()
@@ -68,7 +69,8 @@ class OrderControllerTests extends AbstractIT {
                                 ]
                             }
                             """;
-            RestAssured.given().contentType(ContentType.JSON)
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
                     .body(payload)
                     .when()
                     .post("/api/orders")

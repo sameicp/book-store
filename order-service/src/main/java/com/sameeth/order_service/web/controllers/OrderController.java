@@ -8,14 +8,11 @@ import com.sameeth.order_service.domain.models.CreateOrderResponse;
 import com.sameeth.order_service.domain.models.OrderDTO;
 import com.sameeth.order_service.domain.models.OrderSummary;
 import jakarta.validation.Valid;
-import org.apache.catalina.LifecycleState;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/orders")

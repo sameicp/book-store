@@ -2,6 +2,7 @@ name: 'bookstore'
 services:
   catalog-service:
     image: sameeth/bookstore-catalog-service
+    container_name: catalog-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - DB_URL=jdbc:postgresql://catalog-db:5432/same
@@ -10,6 +11,35 @@ services:
     ports:
       - "8081:8081"
     restart: unless-stopped
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  order-service:
+    image: sameeth/bookstore-order-service
+    container_name: order-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - ORDERS_CATALOG_SERVICE_URL=http://catalog-service:8081
+      - DB_URL=jdbc:postgresql://orders-db:5432/orders
+      - DB_USERNAME=same
+      - DB_PASSWORD=same
+      - RABBITMQ_HOST=bookstore-rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=same
+      - RABBITMQ_PASSWORD=same
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+    depends_on:
+      orders-db:
+        condition: service_healthy
+      bookstore-rabbitmq:
+        condition: service_healthy
     deploy:
       resources:
         limits:
