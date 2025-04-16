@@ -44,3 +44,32 @@ services:
       resources:
         limits:
           memory: 700m
+
+  notification-service:
+    image: sameeth/bookstore-notification-service
+    container_name: notification-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DB_URL=jdbc:postgresql://notifications-db:5432/notifications
+      - DB_USERNAME=same
+      - DB_PASSWORD=same
+      - RABBITMQ_HOST=bookstore-rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=same
+      - RABBITMQ_PASSWORD=same
+      - MAIL_HOST=mailhog
+      - MAIL_PORT=1025
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+    depends_on:
+      notifications-db:
+        condition: service_healthy
+      bookstore-rabbitmq:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 700m
