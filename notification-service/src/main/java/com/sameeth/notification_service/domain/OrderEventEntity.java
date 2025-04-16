@@ -1,7 +1,6 @@
 package com.sameeth.notification_service.domain;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,7 +20,7 @@ public class OrderEventEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public OrderEventEntity () {}
+    public OrderEventEntity() {}
 
     public OrderEventEntity(String eventId) {
         this.eventId = eventId;

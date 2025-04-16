@@ -1,6 +1,5 @@
 package com.sameeth.notification_service.domain.models;
 
-
 import java.time.LocalDateTime;
 import java.util.Set;
 

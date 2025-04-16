@@ -71,5 +71,4 @@ public class OrderEventHandler {
         OrderEventEntity orderEventEntity = new OrderEventEntity(event.eventId());
         orderEventRepository.save(orderEventEntity);
     }
-
 }
