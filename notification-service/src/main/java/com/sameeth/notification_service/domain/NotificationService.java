@@ -1,6 +1,5 @@
 package com.sameeth.notification_service.domain;
 
-
 import com.sameeth.notification_service.ApplicationProperties;
 import com.sameeth.notification_service.domain.models.OrderCancelledEvent;
 import com.sameeth.notification_service.domain.models.OrderCreatedEvent;
@@ -33,7 +32,7 @@ public class NotificationService {
                         ----------------------------------------------------
                         Dear %s,
                         Your order with orderNumber: %s has been created successfully.
-                        
+
                         Thanks,
                         BookStore Team
                         ===================================================
@@ -51,7 +50,7 @@ public class NotificationService {
                         ----------------------------------------------------
                         Dear %s,
                         Your order with orderNumber: %s has been delivered successfully.
-                        
+
                         Thanks,
                         BookStore Team
                         ===================================================
@@ -70,7 +69,7 @@ public class NotificationService {
                         Dear %s,
                         Your order with orderNumber: %s has been cancelled.
                         Reason: %s
-                        
+
                         Thanks,
                         BookStore Team
                         ===================================================
@@ -89,7 +88,7 @@ public class NotificationService {
                         Hi %s,
                         The order processing failed for orderNumber: %s.
                         Reason: %s
-                        
+
                         Thanks,
                         BookStore Team
                         ===================================================
@@ -113,5 +112,4 @@ public class NotificationService {
             throw new RuntimeException("Error while sending email", e);
         }
     }
-
 }
